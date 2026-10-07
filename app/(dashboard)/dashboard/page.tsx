@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, Spinner, Badge } from "flowbite-react";
 import { CATEGORY_TYPE_LABELS } from "@/lib/category-labels";
 import { formatCurrency, formatMonthLabel, currentMonthValue } from "@/lib/format";
+import { MonthPicker } from "@/components/MonthPicker";
 import type { CategoryType } from "@prisma/client";
 
 type Summary = {
@@ -53,12 +54,7 @@ export default function DashboardPage() {
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           Ringkasan Bulanan
         </h1>
-        <input
-          type="month"
-          value={month}
-          onChange={(e) => setMonth(e.target.value)}
-          className="rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-        />
+        <MonthPicker value={month} onChange={setMonth} />
       </div>
 
       {loading && (
