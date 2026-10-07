@@ -27,6 +27,11 @@ ditabung** (`remainingToSave`).
 - Admin: CRUD user (tanpa kemampuan impersonate), dengan password wajib
   diganti saat login pertama baik untuk akun Admin bawaan maupun user yang
   dibuat Admin.
+- Form input bulan & kategori custom (lihat
+  [Komponen UI Kustom](#komponen-ui-kustom)) di halaman Dashboard &
+  Transaksi, lebih rapi & proper dibanding input native browser.
+- Branding: logo & favicon ArtaNote tampil di halaman Login, Ganti Password,
+  Landing page, dan navbar.
 - Desain responsive (mobile, tablet, desktop) menggunakan Flowbite React.
 
 ## Menjalankan secara lokal (tanpa Docker)
@@ -191,6 +196,36 @@ Aturan Admin:
 - Admin tidak bisa mengubah role akun miliknya sendiri atau menghapus akun
   miliknya sendiri (mencegah lockout karena tidak ada mekanisme superadmin
   pemulihan).
+
+## Komponen UI Kustom
+
+Selain komponen bawaan Flowbite React, ada beberapa komponen custom di
+`components/` untuk pengalaman form yang lebih proper:
+
+- **`MonthPicker`** (`components/MonthPicker.tsx`) — pengganti
+  `<input type="month">` native. Menampilkan label bulan terformat
+  (mis. "Oktober 2026"), dan popover dengan navigasi tahun (`‹ ›`) + grid
+  12 bulan, serta shortcut "Bulan ini". Dipakai di halaman **Dashboard**
+  (filter ringkasan bulanan) dan **Transaksi** (filter riwayat transaksi).
+- **`SearchableSelect`** (`components/SearchableSelect.tsx`) — combobox
+  dropdown dengan input pencarian teks untuk memfilter opsi (berguna saat
+  kategori custom user banyak). Dipakai untuk pemilihan kategori di form
+  "Tambah Transaksi" dan filter kategori di halaman Transaksi.
+
+Kedua komponen ini `"use client"`, tidak bergantung pada library pihak
+ketiga tambahan (hanya Flowbite React primitives + Tailwind), dan bisa
+dipakai ulang di form lain yang butuh input bulan atau dropdown
+searchable.
+
+## Branding (Logo & Favicon)
+
+- `public/logo.png` — logo ArtaNote (transparan, resolusi tinggi) dipakai
+  via `next/image` di halaman Login, Ganti Password, Landing page, dan
+  navbar (`components/DashboardNav.tsx`).
+- `app/favicon.ico`, `app/icon.png`, `app/apple-icon.png` — mengikuti
+  konvensi Next.js App Router, otomatis di-generate jadi route
+  `/favicon.ico`, `/icon.png`, `/apple-icon.png` dan tag `<link>` yang
+  sesuai tanpa konfigurasi `metadata.icons` manual.
 
 ## Environment Variables
 
