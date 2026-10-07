@@ -14,7 +14,9 @@ ditabung** (`remainingToSave`).
 
 ## Fitur
 
-- Registrasi & login multi-user (email + password, di-hash dengan bcrypt).
+- Login multi-user (email + password, di-hash dengan bcrypt). Registrasi
+  publik **dinonaktifkan** — akun baru hanya bisa dibuat oleh Admin (lihat
+  [Admin & Manajemen User](#admin--manajemen-user)).
 - Kategori transaksi: preset bawaan (Gaji, Pengeluaran Wajib, Dana Darurat,
   Tabungan) + kategori custom per user.
 - Pencatatan transaksi dengan kategori, jumlah, tanggal, dan catatan.
@@ -22,6 +24,9 @@ ditabung** (`remainingToSave`).
 - Dashboard ringkasan bulanan: total pemasukan, pengeluaran wajib, dana
   darurat, serta **sisa yang bisa ditabung** = pemasukan − pengeluaran wajib
   − dana darurat.
+- Admin: CRUD user (tanpa kemampuan impersonate), dengan password wajib
+  diganti saat login pertama baik untuk akun Admin bawaan maupun user yang
+  dibuat Admin.
 - Desain responsive (mobile, tablet, desktop) menggunakan Flowbite React.
 
 ## Menjalankan secara lokal (tanpa Docker)
@@ -148,16 +153,44 @@ Vercel Postgres (atau provider Postgres lain seperti Neon/Supabase).
    - `DATABASE_URL`
    - `NEXTAUTH_SECRET` (generate dengan `openssl rand -base64 32`)
    - `NEXTAUTH_URL` (mis. `https://nama-app-anda.vercel.app`)
-4. Jalankan migrasi database sekali sebelum/selama deploy pertama:
-   ```bash
-   DATABASE_URL="<connection-string-produksi>" npx prisma migrate deploy
-   ```
-   (Bisa dijalankan dari mesin lokal, atau sebagai Vercel Build Command
-   tambahan: `prisma migrate deploy && next build`.)
+4. Migrasi database (termasuk migration seed Admin) dijalankan otomatis saat
+   build di Vercel — `vercel.json` di root project sudah mengatur
+   `buildCommand: "prisma migrate deploy && next build"`, jadi tidak perlu
+   langkah manual tambahan.
 5. Deploy. Vercel akan mengabaikan `output: "standalone"` di
    `next.config.ts` (konfigurasi ini hanya dipakai untuk build Docker) dan
    tetap memakai sistem build serverless miliknya sendiri — tidak ada
    konflik.
+
+## Admin & Manajemen User
+
+Registrasi publik (`/register`) sudah dinonaktifkan. Semua akun dibuat lewat
+halaman **Admin → Kelola User** (`/admin/users`, hanya bisa diakses role
+`ADMIN`).
+
+**Akun Admin bawaan** (otomatis ter-seed oleh migration
+`20261007163000_add_admin_role_and_force_password_change`, di semua
+environment — dev Docker, produksi Docker, maupun Vercel):
+
+| Email | Password default |
+|---|---|
+| `admin@artanote.app` | `ChangeMe123!` |
+
+> ⚠️ **Ganti password ini sesegera mungkin setelah deploy pertama.** Password
+> default ada di source code (migration SQL) sehingga dianggap publik.
+> Sistem akan otomatis memaksa ganti password saat login pertama kali
+> (halaman `/change-password`) — ini berlaku untuk semua akun yang baru
+> dibuat, bukan hanya Admin bawaan.
+
+Aturan Admin:
+- Admin bisa membuat, melihat, mengedit (nama/email/role/reset password),
+  dan menghapus user lain — **tidak bisa** login/masuk sebagai user lain
+  (tidak ada fitur impersonate).
+- Setiap user yang dibuat Admin otomatis diberi password sementara dan wajib
+  menggantinya saat login pertama (`mustChangePassword = true`).
+- Admin tidak bisa mengubah role akun miliknya sendiri atau menghapus akun
+  miliknya sendiri (mencegah lockout karena tidak ada mekanisme superadmin
+  pemulihan).
 
 ## Environment Variables
 
@@ -172,7 +205,8 @@ Lihat `.env.example` untuk daftar lengkap:
 
 ## Struktur Database
 
-- `User` — akun pengguna (email, password hash).
+- `User` — akun pengguna (email, password hash, `role` [`ADMIN`/`USER`],
+  `mustChangePassword`).
 - `Category` — kategori transaksi (tipe: `INCOME`, `MANDATORY_EXPENSE`,
   `EMERGENCY_FUND`, `SAVINGS`), bisa preset atau custom per user.
 - `Transaction` — transaksi yang menyimpan jumlah, tanggal, catatan, dan

@@ -11,8 +11,9 @@ const links = [
   { href: "/categories", label: "Kategori" },
 ];
 
-export function DashboardNav({ userName }: { userName: string }) {
+export function DashboardNav({ userName, isAdmin }: { userName: string; isAdmin?: boolean }) {
   const pathname = usePathname();
+  const navLinks = isAdmin ? [...links, { href: "/admin/users", label: "Admin" }] : links;
 
   return (
     <Navbar fluid className="border-b border-gray-200 dark:border-gray-700">
@@ -31,7 +32,7 @@ export function DashboardNav({ userName }: { userName: string }) {
         <NavbarToggle />
       </div>
       <NavbarCollapse>
-        {links.map((link) => (
+        {navLinks.map((link) => (
           <NavbarLink
             key={link.href}
             as={Link}

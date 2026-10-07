@@ -19,14 +19,8 @@ export default async function Home() {
       </p>
       <div className="flex flex-col gap-3 sm:flex-row">
         <Link
-          href="/register"
-          className="rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
-        >
-          Mulai Sekarang
-        </Link>
-        <Link
           href="/login"
-          className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:text-white dark:hover:bg-gray-700"
+          className="rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
         >
           Masuk
         </Link>
