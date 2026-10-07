@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, Spinner, Badge } from "flowbite-react";
+import { Card, Label, Spinner, Badge } from "flowbite-react";
 import { CATEGORY_TYPE_LABELS } from "@/lib/category-labels";
 import { formatCurrency, formatMonthLabel, currentMonthValue } from "@/lib/format";
 import { MonthPicker } from "@/components/MonthPicker";
@@ -54,7 +54,12 @@ export default function DashboardPage() {
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           Ringkasan Bulanan
         </h1>
-        <MonthPicker value={month} onChange={setMonth} />
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="monthFilter" className="block text-sm font-medium">
+            Bulan
+          </Label>
+          <MonthPicker id="monthFilter" value={month} onChange={setMonth} />
+        </div>
       </div>
 
       {loading && (
