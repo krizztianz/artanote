@@ -6,7 +6,6 @@ import {
   Button,
   Label,
   TextInput,
-  Select,
   Alert,
   Table,
   TableHead,
@@ -18,6 +17,8 @@ import {
   Spinner,
 } from "flowbite-react";
 import { CategoryType } from "@prisma/client";
+import { MonthPicker } from "@/components/MonthPicker";
+import { SearchableSelect } from "@/components/SearchableSelect";
 import { CATEGORY_TYPE_LABELS } from "@/lib/category-labels";
 import { formatCurrency, currentMonthValue } from "@/lib/format";
 
@@ -124,19 +125,18 @@ export default function TransactionsPage() {
             </div>
           )}
           <div>
-            <Label htmlFor="categoryId">Kategori</Label>
-            <Select
+            <Label htmlFor="categoryId" className="mb-2 block">Kategori</Label>
+            <SearchableSelect
               id="categoryId"
-              required
               value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
-            >
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name} ({CATEGORY_TYPE_LABELS[cat.type]})
-                </option>
-              ))}
-            </Select>
+              onChange={setCategoryId}
+              placeholder="Pilih kategori"
+              options={categories.map((cat) => ({
+                value: cat.id,
+                label: cat.name,
+                hint: CATEGORY_TYPE_LABELS[cat.type],
+              }))}
+            />
           </div>
           <div>
             <Label htmlFor="amount">Jumlah (Rp)</Label>
@@ -183,37 +183,37 @@ export default function TransactionsPage() {
               <Label htmlFor="monthFilter" className="block text-sm font-medium">
                 Bulan
               </Label>
-              <input
+              <MonthPicker
                 id="monthFilter"
-                type="month"
                 value={month}
-                onChange={(e) => {
-                  setMonth(e.target.value);
+                onChange={(newMonth) => {
+                  setMonth(newMonth);
                   setPage(1);
                 }}
-                className="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:w-44"
               />
             </div>
             <div className="flex flex-col gap-1">
               <Label htmlFor="categoryFilter" className="block text-sm font-medium">
                 Kategori
               </Label>
-              <Select
+              <SearchableSelect
                 id="categoryFilter"
+                className="w-full sm:w-44"
+                placeholder="Semua Kategori"
                 value={categoryFilter}
-                onChange={(e) => {
-                  setCategoryFilter(e.target.value);
+                onChange={(newValue) => {
+                  setCategoryFilter(newValue);
                   setPage(1);
                 }}
-                className="w-full sm:w-44"
-              >
-                <option value="">Semua Kategori</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </Select>
+                options={[
+                  { value: "", label: "Semua Kategori" },
+                  ...categories.map((cat) => ({
+                    value: cat.id,
+                    label: cat.name,
+                    hint: CATEGORY_TYPE_LABELS[cat.type],
+                  })),
+                ]}
+              />
             </div>
           </div>
         </div>
