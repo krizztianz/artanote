@@ -1,0 +1,49 @@
+name: artanote-dev
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-finance_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-finance_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-finance_db}
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    ports:
+      - "55432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-finance_user} -d ${POSTGRES_DB:-finance_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-finance_user}:${POSTGRES_PASSWORD:-finance_pass}@postgres:5432/${POSTGRES_DB:-finance_db}?schema=public
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      # Turbopack (Next.js 16 default) does not detect file changes reliably
+      # through a Windows Docker Desktop bind mount. dev:docker forces the
+      # webpack bundler, which respects WATCHPACK_POLLING below.
+      WATCHPACK_POLLING: "true"
+    ports:
+      - "3000:3000"
+    volumes:
+      # Bind-mount source for hot reload; keep node_modules and .next inside
+      # the container (named/anonymous volumes) so host <-> container native
+      # binary/OS differences don't break them.
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    command: sh -c "npx prisma migrate deploy && npm run dev:docker"
+
+volumes:
+  postgres_dev_data:

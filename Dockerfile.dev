@@ -1,0 +1,20 @@
+# syntax=docker/dockerfile:1
+
+# Development image: installs full dependencies and runs `next dev` using the
+# webpack bundler (not Turbopack) so WATCHPACK_POLLING works and file changes
+# via the Windows bind mount are detected reliably. Source code is bind-mounted
+# at runtime (see docker-compose.dev.yml), so this image intentionally does NOT
+# copy application source or build it.
+FROM node:20-alpine
+WORKDIR /app
+
+RUN apk add --no-cache libc6-compat openssl
+
+COPY package.json package-lock.json* ./
+COPY prisma ./prisma
+RUN npm ci
+
+EXPOSE 3000
+ENV NEXT_TELEMETRY_DISABLED=1
+
+CMD ["npm", "run", "dev:docker"]
