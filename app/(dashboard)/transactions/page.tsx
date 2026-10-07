@@ -174,13 +174,15 @@ export default function TransactionsPage() {
       </Card>
 
       <Card>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
             Riwayat Transaksi
           </h2>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <div>
-              <Label htmlFor="monthFilter">Bulan</Label>
+          <div className="grid grid-cols-2 gap-3 sm:w-auto sm:flex sm:flex-row">
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="monthFilter" className="block text-sm font-medium">
+                Bulan
+              </Label>
               <input
                 id="monthFilter"
                 type="month"
@@ -189,11 +191,13 @@ export default function TransactionsPage() {
                   setMonth(e.target.value);
                   setPage(1);
                 }}
-                className="rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                className="w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:w-44"
               />
             </div>
-            <div>
-              <Label htmlFor="categoryFilter">Kategori</Label>
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="categoryFilter" className="block text-sm font-medium">
+                Kategori
+              </Label>
               <Select
                 id="categoryFilter"
                 value={categoryFilter}
@@ -201,6 +205,7 @@ export default function TransactionsPage() {
                   setCategoryFilter(e.target.value);
                   setPage(1);
                 }}
+                className="w-full sm:w-44"
               >
                 <option value="">Semua Kategori</option>
                 {categories.map((cat) => (
