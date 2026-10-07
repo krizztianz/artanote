@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
@@ -10,8 +11,9 @@ export default async function Home() {
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-6 px-4 text-center">
+      <Image src="/logo.png" alt="ArtaNote" width={112} height={126} priority />
       <h1 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
-        💰 ArtaNote
+        ArtaNote
       </h1>
       <p className="max-w-xl text-gray-600 dark:text-gray-300">
         Catat gaji, pengeluaran wajib, dan dana darurat setiap bulan, lalu

@@ -2,6 +2,7 @@
 
 import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle, Button } from "flowbite-react";
 
@@ -18,8 +19,9 @@ export function DashboardNav({ userName, isAdmin }: { userName: string; isAdmin?
   return (
     <Navbar fluid className="border-b border-gray-200 dark:border-gray-700">
       <NavbarBrand as={Link} href="/dashboard">
+        <Image src="/logo.png" alt="ArtaNote" width={32} height={36} className="mr-2" />
         <span className="self-center whitespace-nowrap text-lg font-semibold dark:text-white">
-          💰 ArtaNote
+          ArtaNote
         </span>
       </NavbarBrand>
       <div className="flex items-center gap-3 md:order-2">

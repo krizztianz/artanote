@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { Button, Card, Label, TextInput, Alert, Spinner } from "flowbite-react";
 
@@ -51,9 +52,12 @@ export default function ChangePasswordPage() {
   return (
     <main className="flex flex-1 items-center justify-center px-4 py-12">
       <Card className="w-full max-w-md">
-        <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-          Ganti Password
-        </h1>
+        <div className="flex flex-col items-center gap-2">
+          <Image src="/logo.png" alt="ArtaNote" width={72} height={81} priority />
+          <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+            Ganti Password
+          </h1>
+        </div>
         {forced && (
           <Alert color="warning">
             Demi keamanan, kamu wajib mengganti password default sebelum

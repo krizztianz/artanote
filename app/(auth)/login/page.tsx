@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { Button, Card, Label, TextInput, Alert, Spinner } from "flowbite-react";
 
@@ -37,9 +38,12 @@ export default function LoginPage() {
   return (
     <main className="flex flex-1 items-center justify-center px-4 py-12">
       <Card className="w-full max-w-md">
-        <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-          Masuk ke Akun
-        </h1>
+        <div className="flex flex-col items-center gap-2">
+          <Image src="/logo.png" alt="ArtaNote" width={72} height={81} priority />
+          <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+            Masuk ke Akun
+          </h1>
+        </div>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           {error && <Alert color="failure">{error}</Alert>}
           <div>
