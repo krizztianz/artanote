@@ -77,7 +77,7 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Card>
               <span className="text-sm text-gray-500 dark:text-gray-400">Pemasukan (Gaji)</span>
-              <span className="text-2xl font-bold text-green-600 dark:text-green-400">
+              <span className="text-2xl font-bold text-brand">
                 {formatCurrency(summary.totals.income)}
               </span>
             </Card>
@@ -87,18 +87,18 @@ export default function DashboardPage() {
                 {formatCurrency(summary.totals.mandatoryExpense)}
               </span>
             </Card>
-            <Card>
+            <Card className="bg-accent-soft dark:bg-accent-soft">
               <span className="text-sm text-gray-500 dark:text-gray-400">Dana Darurat</span>
-              <span className="text-2xl font-bold text-amber-600 dark:text-amber-400">
+              <span className="text-2xl font-bold text-warning">
                 {formatCurrency(summary.totals.emergencyFund)}
               </span>
             </Card>
-            <Card className={remaining >= 0 ? "" : "border-red-400"}>
+            <Card className={remaining >= 0 ? "bg-brand-soft dark:bg-brand-soft" : "border-red-400 dark:border-red-400"}>
               <span className="text-sm text-gray-500 dark:text-gray-400">Sisa Bisa Ditabung</span>
               <span
                 className={`text-2xl font-bold ${
                   remaining >= 0
-                    ? "text-blue-600 dark:text-blue-400"
+                    ? "text-brand"
                     : "text-red-600 dark:text-red-400"
                 }`}
               >

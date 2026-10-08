@@ -33,6 +33,7 @@ export function MonthPicker({ id, value, onChange }: MonthPickerProps) {
   const [open, setOpen] = useState(false);
   const [year, setYear] = useState(() => Number(value.split("-")[0]));
   const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   const [selectedYear, selectedMonth] = value.split("-").map(Number);
 
@@ -59,21 +60,35 @@ export function MonthPicker({ id, value, onChange }: MonthPickerProps) {
   function selectMonth(monthIndex: number) {
     onChange(`${year}-${String(monthIndex + 1).padStart(2, "0")}`);
     setOpen(false);
+    triggerRef.current?.focus();
   }
 
   function goToCurrentMonth() {
     const now = new Date();
     onChange(`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`);
     setOpen(false);
+    triggerRef.current?.focus();
   }
 
   return (
-    <div ref={containerRef} className="relative">
+    <div
+      ref={containerRef}
+      className="relative"
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          setOpen(false);
+          triggerRef.current?.focus();
+        }
+      }}
+    >
       <button
+        ref={triggerRef}
         id={id}
         type="button"
+        aria-expanded={open}
+        aria-haspopup="dialog"
         onClick={toggleOpen}
-        className="flex w-full items-center justify-between gap-2 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-left text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:w-44"
+        className="theme-control flex w-full items-center justify-between gap-2 p-2.5 text-left text-sm sm:w-44"
       >
         <span>{formatMonthLabel(value)}</span>
         <svg
@@ -92,13 +107,13 @@ export function MonthPicker({ id, value, onChange }: MonthPickerProps) {
       </button>
 
       {open && (
-        <div className="absolute z-20 mt-1 w-64 rounded-lg border border-gray-200 bg-white p-3 shadow-lg dark:border-gray-600 dark:bg-gray-700">
+        <div role="dialog" aria-label="Pilih bulan" className="theme-popover absolute left-0 z-20 mt-1 w-64 p-3 sm:left-auto sm:right-0">
           <div className="mb-2 flex items-center justify-between">
             <button
               type="button"
               aria-label="Tahun sebelumnya"
               onClick={() => setYear((y) => y - 1)}
-              className="rounded p-1 text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600"
+              className="theme-option rounded p-1 text-muted"
             >
               &#x2039;
             </button>
@@ -107,7 +122,7 @@ export function MonthPicker({ id, value, onChange }: MonthPickerProps) {
               type="button"
               aria-label="Tahun berikutnya"
               onClick={() => setYear((y) => y + 1)}
-              className="rounded p-1 text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600"
+              className="theme-option rounded p-1 text-muted"
             >
               &#x203a;
             </button>
@@ -119,12 +134,9 @@ export function MonthPicker({ id, value, onChange }: MonthPickerProps) {
                 <button
                   key={label}
                   type="button"
+                  aria-pressed={isSelected}
                   onClick={() => selectMonth(index)}
-                  className={`rounded px-2 py-1.5 text-sm ${
-                    isSelected
-                      ? "bg-blue-600 text-white"
-                      : "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600"
-                  }`}
+                  className="theme-option rounded px-2 py-1.5 text-sm"
                 >
                   {label}
                 </button>
@@ -135,7 +147,7 @@ export function MonthPicker({ id, value, onChange }: MonthPickerProps) {
             <button
               type="button"
               onClick={goToCurrentMonth}
-              className="text-xs font-medium text-blue-700 hover:underline dark:text-blue-400"
+              className="theme-link text-xs"
             >
               Bulan ini
             </button>

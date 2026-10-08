@@ -233,6 +233,31 @@ searchable.
   `/favicon.ico`, `/icon.png`, `/apple-icon.png` dan tag `<link>` yang
   sesuai tanpa konfigurasi `metadata.icons` manual.
 
+## Tema & Warna
+
+- `app/globals.css` menyimpan token Tailwind/CSS bersama: primary emerald/teal
+  dari logo, permukaan light hangat (`#FAFAF5` / putih), serta permukaan dark
+  hijau netral (`#101C18` / `#182923`). Skala neutral `gray-*` Flowbite juga
+  diarahkan ke palet ini agar halaman dan komponen memakai warna konsisten.
+- `lib/theme.ts` mendefinisikan tema Flowbite bertipe untuk button, input,
+  select, checkbox, navbar, card, pagination, spinner, badge, alert, table,
+  dan modal. `app/providers.tsx` memasangnya lewat `ThemeProvider` di dalam
+  `SessionProvider`. Jangan edit daftar tema/generated `.flowbite-react/`.
+- Geist dari root layout dipakai secara konsisten. `MonthPicker`,
+  `SearchableSelect`, dan link auth memakai kelas bersama `theme-*`, dengan
+  focus keyboard emerald dan penanda pilihan yang tidak hanya berupa warna.
+- Primary teks: `#047857` (light), `#34D399` (dark). Tombol filled tetap hijau
+  gelap dengan teks putih; jangan memakai emerald terang sebagai background
+  tombol dengan teks putih. Gold (`#D4A72C` / `#F2CC60`) hanya untuk detail
+  dekoratif atau permukaan tinted, bukan teks normal berkontras rendah.
+- Merah tetap untuk error, pengeluaran, saldo negatif, dan aksi destruktif.
+  Warning memakai amber gelap di light dan amber terang di dark; tidak
+  disamakan dengan primary atau dekorasi gold.
+- Mode mengikuti preferensi sistem melalui media query Tailwind/CSS yang
+  sudah digunakan aplikasi; `ThemeInit` tetap dipertahankan, tanpa toggle baru.
+  Perubahan token harus menjaga kontras teks normal minimal 4.5:1, teks besar
+  3:1, serta batas kontrol dan focus yang terlihat di kedua mode.
+
 ## Environment Variables
 
 Lihat `.env.example` untuk daftar lengkap:

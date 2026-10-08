@@ -233,7 +233,7 @@ export default function AdminUsersPage() {
                   <TableCell>{user.name ?? "-"}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
-                    <Badge color={user.role === "ADMIN" ? "purple" : "gray"} className="w-fit">
+                    <Badge color={user.role === "ADMIN" ? "info" : "gray"} className="w-fit">
                       {user.role === "ADMIN" ? "Admin" : "User"}
                     </Badge>
                   </TableCell>

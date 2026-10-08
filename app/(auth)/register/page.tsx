@@ -67,7 +67,7 @@ export default function RegisterPage() {
 
   return (
     <main className="flex flex-1 items-center justify-center px-4 py-12">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md border-t-4 border-t-accent dark:border-t-accent">
         <div className="flex flex-col items-center gap-2">
           <Image src="/logo.png" alt="ArtaNote" width={72} height={81} priority />
           <h1 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -120,9 +120,9 @@ export default function RegisterPage() {
             </Button>
           </form>
         )}
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-sm text-muted">
           Sudah punya akun?{" "}
-          <Link href="/login" className="font-medium text-blue-700 hover:underline dark:text-blue-500">
+          <Link href="/login" className="theme-link">
             Masuk di sini
           </Link>
         </p>

@@ -51,7 +51,7 @@ export default function ChangePasswordPage() {
 
   return (
     <main className="flex flex-1 items-center justify-center px-4 py-12">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md border-t-4 border-t-accent dark:border-t-accent">
         <div className="flex flex-col items-center gap-2">
           <Image src="/logo.png" alt="ArtaNote" width={72} height={81} priority />
           <h1 className="text-xl font-bold text-gray-900 dark:text-white">

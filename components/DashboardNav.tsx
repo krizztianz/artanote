@@ -25,7 +25,7 @@ export function DashboardNav({ userName, isAdmin }: { userName: string; isAdmin?
         </span>
       </NavbarBrand>
       <div className="flex items-center gap-3 md:order-2">
-        <span className="hidden text-sm text-gray-600 dark:text-gray-300 sm:inline">
+        <span className="hidden text-sm text-muted sm:inline">
           Halo, {userName}
         </span>
         <Button size="sm" color="light" onClick={() => signOut({ callbackUrl: "/login" })}>

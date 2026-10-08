@@ -33,6 +33,7 @@ export function SearchableSelect({
   const [query, setQuery] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   const selected = options.find((opt) => opt.value === value);
 
@@ -66,15 +67,27 @@ export function SearchableSelect({
   function handleSelect(optionValue: string) {
     onChange(optionValue);
     setOpen(false);
+    triggerRef.current?.focus();
   }
 
   return (
-    <div ref={containerRef} className={`relative ${className}`}>
+    <div
+      ref={containerRef}
+      className={`relative ${className}`}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          setOpen(false);
+          triggerRef.current?.focus();
+        }
+      }}
+    >
       <button
+        ref={triggerRef}
         id={id}
         type="button"
+        aria-expanded={open}
         onClick={toggleOpen}
-        className="flex w-full items-center justify-between gap-2 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-left text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+        className="theme-control flex w-full items-center justify-between gap-2 p-2.5 text-left text-sm"
       >
         <span className="truncate">{selected?.label ?? placeholder}</span>
         <svg
@@ -88,15 +101,16 @@ export function SearchableSelect({
       </button>
 
       {open && (
-        <div className="absolute z-20 mt-1 w-full min-w-56 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700">
+        <div className="theme-popover absolute right-0 z-20 mt-1 w-full min-w-56">
           <div className="border-b border-gray-100 p-2 dark:border-gray-600">
             <input
               ref={inputRef}
               type="text"
+              aria-label={placeholder}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={placeholder}
-              className="w-full rounded border border-gray-300 bg-gray-50 px-2 py-1.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+              className="theme-control w-full px-2 py-1.5 text-sm placeholder:text-muted"
             />
           </div>
           <ul className="max-h-56 overflow-y-auto py-1">
@@ -104,12 +118,9 @@ export function SearchableSelect({
               <li key={opt.value}>
                 <button
                   type="button"
+                  aria-pressed={opt.value === value}
                   onClick={() => handleSelect(opt.value)}
-                  className={`flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-600 ${
-                    opt.value === value
-                      ? "bg-blue-50 font-medium text-blue-700 dark:bg-gray-600 dark:text-blue-400"
-                      : "text-gray-700 dark:text-gray-200"
-                  }`}
+                  className="theme-option flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-sm"
                 >
                   <span className="truncate">{opt.label}</span>
                   {opt.hint && (
