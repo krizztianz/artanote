@@ -15,7 +15,8 @@ ditabung** (`remainingToSave`).
 ## Fitur
 
 - Login multi-user (email + password, di-hash dengan bcrypt). Registrasi
-  publik **dinonaktifkan** — akun baru hanya bisa dibuat oleh Admin (lihat
+  mandiri tersedia di `/register`, melalui link di halaman Login dan Landing
+  page. Akun juga bisa dibuat oleh Admin (lihat
   [Admin & Manajemen User](#admin--manajemen-user)).
 - Kategori transaksi: preset bawaan (Gaji, Pengeluaran Wajib, Dana Darurat,
   Tabungan) + kategori custom per user.
@@ -30,7 +31,7 @@ ditabung** (`remainingToSave`).
 - Form input bulan & kategori custom (lihat
   [Komponen UI Kustom](#komponen-ui-kustom)) di halaman Dashboard &
   Transaksi, lebih rapi & proper dibanding input native browser.
-- Branding: logo & favicon ArtaNote tampil di halaman Login, Ganti Password,
+- Branding: logo & favicon ArtaNote tampil di halaman Login, Register, Ganti Password,
   Landing page, dan navbar.
 - Desain responsive (mobile, tablet, desktop) menggunakan Flowbite React.
 
@@ -169,9 +170,14 @@ Vercel Postgres (atau provider Postgres lain seperti Neon/Supabase).
 
 ## Admin & Manajemen User
 
-Registrasi publik (`/register`) sudah dinonaktifkan. Semua akun dibuat lewat
-halaman **Admin → Kelola User** (`/admin/users`, hanya bisa diakses role
-`ADMIN`).
+User bisa mendaftar mandiri melalui `/register` (API `POST /api/auth/register`)
+dengan memilih password sendiri, minimal 8 karakter. Akun registrasi mandiri
+selalu memiliki role `USER` dan `mustChangePassword = false`, sehingga tidak
+perlu mengganti password saat login pertama. Kategori preset dibuat otomatis
+bersamaan dengan akun.
+
+Admin tetap bisa membuat akun lewat halaman **Admin → Kelola User**
+(`/admin/users`, hanya bisa diakses role `ADMIN`).
 
 **Akun Admin bawaan** (otomatis ter-seed oleh migration
 `20261007163000_add_admin_role_and_force_password_change`, di semua
@@ -184,8 +190,8 @@ environment — dev Docker, produksi Docker, maupun Vercel):
 > ⚠️ **Ganti password ini sesegera mungkin setelah deploy pertama.** Password
 > default ada di source code (migration SQL) sehingga dianggap publik.
 > Sistem akan otomatis memaksa ganti password saat login pertama kali
-> (halaman `/change-password`) — ini berlaku untuk semua akun yang baru
-> dibuat, bukan hanya Admin bawaan.
+> (halaman `/change-password`) — ini berlaku untuk Admin bawaan dan akun
+> yang dibuat Admin, bukan akun yang mendaftar mandiri.
 
 Aturan Admin:
 - Admin bisa membuat, melihat, mengedit (nama/email/role/reset password),

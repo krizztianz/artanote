@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { Button, Card, Label, TextInput, Alert, Spinner } from "flowbite-react";
 
@@ -71,6 +72,12 @@ export default function LoginPage() {
             Masuk
           </Button>
         </form>
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          Belum punya akun?{" "}
+          <Link href="/register" className="font-medium text-blue-700 hover:underline dark:text-blue-500">
+            Daftar di sini
+          </Link>
+        </p>
       </Card>
     </main>
   );
